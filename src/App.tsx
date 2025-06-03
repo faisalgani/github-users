@@ -1,5 +1,4 @@
 import React from 'react';
-import Accordion from './components/UserAccordion';
 import SearchPages from './pages/searchPage';
 
 

@@ -5,16 +5,14 @@ import {
   AccordionDetails,
   Typography,
   Box,
-  Paper,
   Grid
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useUserStore } from '../store/userStore';
 import { useUserRepoStore } from '../store/userRepo';
-import axios from 'axios';
 import utility from '../tools/utility'
 import StarIcon from '@mui/icons-material/Star';
+import { getUserRepos } from '../services/githubService';
 
 
 const UserAccordion: React.FC = () => {
@@ -30,30 +28,24 @@ const UserAccordion: React.FC = () => {
 
   const getDetailRepo = async(username:string) => {
      try {
-        const response = await axios.get(`https://api.github.com/users/${username}/repos`);
-     
-        if (utility.responseCode(response.status)) {
-            //  console.log(response.data)
-           await setUserRepo(response.data);
-        }
+          const response = await getUserRepos(username)
+          if (utility.responseCode(response.status)) {
+             const newData = response.data.map((item: any) => {
+              return {
+                name :  item.name,
+                description :  item.description,
+                stargazers_count: item.stargazers_count
+              };
+            });
+            await setUserRepo(newData);
+          }
     } catch (err: any) {
     } finally {
     }
   }
 
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: (theme.vars ?? theme).palette.text.secondary,
-    ...theme.applyStyles('dark', {
-      backgroundColor: '#1A2027',
-    }),
-  }));
-
   useEffect(() => {
-    console.log('User repo changed:', userRepo);
+
   }, [userRepo]);
   return (
    <div style={{ width: '100%', margin: '2rem auto' }}>
@@ -70,7 +62,7 @@ const UserAccordion: React.FC = () => {
               <Typography>{user.login}</Typography>
             </AccordionSummary>
             <AccordionDetails sx={{ ml: 2,boxShadow: 'none'  }}>
-               {userRepo.length > 1 ? (
+               {userRepo.length > 0 ? (
                    userRepo.map((repo, i) => (
                   <Box sx={{ flexGrow: 5, backgroundColor: '#f5f5f5', padding: 2, mb: i !== userRepo.length - 1 ? 2 : 0, }}>
                   <Grid spacing={2} container sx={{ outline: 'none' }}>
@@ -95,7 +87,7 @@ const UserAccordion: React.FC = () => {
                 )) 
   
                 ) : (
-                 <Typography>No repo found.</Typography>
+                 <Typography>No repo found !</Typography>
                 )} 
               { userRepo.map((repo, i) => (
                   <Box sx={{ flexGrow: 5, backgroundColor: '#f5f5f5', padding: 2, mb: i !== userRepo.length - 1 ? 2 : 0, }}>
