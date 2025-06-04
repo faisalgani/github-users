@@ -1,6 +1,6 @@
 # GitHub User Search App
 
-A simple React + Vite application to search GitHub users and display their public repositories. Built using Material UI (MUI), Zustand for state management, GitHub API and Vitest
+A simple React + Vite application to search GitHub users and display their public repositories. Built using Material UI (MUI), Zustand for state management, GitHub API and Vitest for unit testing
 
 ## 🔧 Tech Stack
 
@@ -10,7 +10,7 @@ A simple React + Vite application to search GitHub users and display their publi
 - [Zustand](https://github.com/pmndrs/zustand)
 - [Axios](https://axios-http.com/)
 - [GitHub REST API v3](https://docs.github.com/en/rest)
-- [Unit Test](https://vitest.dev/)
+- [Vitest](https://vitest.dev/)
 
 ## ✨ Features
 
