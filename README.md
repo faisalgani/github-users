@@ -1,54 +1,37 @@
-# React + TypeScript + Vite
+# GitHub User Search App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple React + Vite application to search GitHub users and display their public repositories. Built using Material UI (MUI), Zustand for state management, GitHub API and Vitest
 
-Currently, two official plugins are available:
+## 🔧 Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [React](https://reactjs.org/)
+- [Vite](https://vitejs.dev/)
+- [Material UI (MUI)](https://mui.com/)
+- [Zustand](https://github.com/pmndrs/zustand)
+- [Axios](https://axios-http.com/)
+- [GitHub REST API v3](https://docs.github.com/en/rest)
+- [Unit Test](https://vitest.dev/)
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Search GitHub users by username
+- Display a list of users with their login
+- Expand each user to show their public repositories
+- Show repository name, description, and star count
+- Error handling for invalid input or no results
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## 📦 Installation
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+```bash
+# Clone the repository
+git clone https://github.com/your-username/github-user-search.git
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+# Navigate to the project directory
+cd github-user-search
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+# Install dependencies
+node version 21.6.2
+npm install
+
+# Unit tests
+npx vitest run

@@ -30,6 +30,7 @@ const SearcPages: React.FC = () => {
     clearUserRepo()
     if (!username.trim()) {
       setError(true);
+      setResult(null)
       return;
     }
     setLoading(true);
@@ -65,6 +66,7 @@ const SearcPages: React.FC = () => {
       await clearUsers()
       if (!username.trim()) {
         setError(true);
+        setResult(null)
         return;
       }
       setError(false);
@@ -106,7 +108,7 @@ const SearcPages: React.FC = () => {
         fullWidth
         variant="contained"
         onClick={handleSearch}
-        sx={{ mt: 2 }}
+        sx={{ mt: 2, width: '50%', mx: 'auto', display: 'block' }}
         disabled={loading}
       >
         {loading ? 'Searching...' : 'Search'}

@@ -18,6 +18,7 @@ const UserAccordion: React.FC = () => {
   const { users } = useUserStore();
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const { userRepo, setUserRepo } = useUserRepoStore();
+  const [loadingRepo, setLoadingRepo] = useState(false);
 
   const handleChange = (index: number, username: string) => async (
     _event: React.SyntheticEvent,
@@ -26,6 +27,7 @@ const UserAccordion: React.FC = () => {
     setExpandedIndex(isExpanded ? index : null);
 
     if (isExpanded) {
+      setLoadingRepo(true); // Mulai loading
       try {
         const response = await getUserRepos(username);
         if (utility.responseCode(response.status)) {
@@ -40,6 +42,8 @@ const UserAccordion: React.FC = () => {
         }
       } catch (error) {
         setUserRepo([]);
+      } finally {
+        setLoadingRepo(false); // Selesai loading
       }
     }
   };
@@ -63,7 +67,9 @@ const UserAccordion: React.FC = () => {
             <AccordionDetails sx={{ ml: 2, boxShadow: 'none' }}>
               {expandedIndex === index && (
                 <>
-                  {userRepo.length > 0 ? (
+                  {loadingRepo ? (
+                    <Typography>Loading repositories...</Typography>
+                  ) : userRepo.length > 0 ? (
                     userRepo.map((repo, i) => (
                       <Box
                         key={repo.name + i}
