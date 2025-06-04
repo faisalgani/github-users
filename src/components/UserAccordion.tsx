@@ -1,118 +1,107 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
   Typography,
-  Box,
-  Grid
+  Box
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import StarIcon from '@mui/icons-material/Star';
+
 import { useUserStore } from '../store/userStore';
 import { useUserRepoStore } from '../store/userRepo';
-import utility from '../tools/utility'
-import StarIcon from '@mui/icons-material/Star';
+import utility from '../tools/utility';
 import { getUserRepos } from '../services/githubService';
-
 
 const UserAccordion: React.FC = () => {
   const { users } = useUserStore();
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-  const { userRepo, setUserRepo, clearUserRepo } = useUserRepoStore();
+  const { userRepo, setUserRepo } = useUserRepoStore();
 
-  const handleChange =
-    (index: number, username : string) => (_event: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpandedIndex(isExpanded ? index : null);
-      getDetailRepo(username)
-    };
+  const handleChange = (index: number, username: string) => async (
+    _event: React.SyntheticEvent,
+    isExpanded: boolean
+  ) => {
+    setExpandedIndex(isExpanded ? index : null);
 
-  const getDetailRepo = async(username:string) => {
-     try {
-          const response = await getUserRepos(username)
-          if (utility.responseCode(response.status)) {
-             const newData = response.data.map((item: any) => {
-              return {
-                name :  item.name,
-                description :  item.description,
-                stargazers_count: item.stargazers_count
-              };
-            });
-            await setUserRepo(newData);
-          }
-    } catch (err: any) {
-    } finally {
+    if (isExpanded) {
+      try {
+        const response = await getUserRepos(username);
+        if (utility.responseCode(response.status)) {
+          const newData = response.data.map((item: any) => ({
+            name: item.name,
+            description: item.description,
+            stargazers_count: item.stargazers_count
+          }));
+          setUserRepo(newData);
+        } else {
+          setUserRepo([]);
+        }
+      } catch (error) {
+        setUserRepo([]);
+      }
     }
-  }
+  };
 
-  useEffect(() => {
-
-  }, [userRepo]);
   return (
-   <div style={{ width: '100%', margin: '2rem auto' }}>
+    <div style={{ width: '100%', margin: '2rem auto' }}>
       {users.length === 0 ? (
         <Typography>No users found.</Typography>
       ) : (
         users.map((user, index) => (
-          <Accordion sx={{backgroundColor: '#fffffff'}}
+          <Accordion
             key={user.id}
             expanded={expandedIndex === index}
-            onChange={handleChange(index,user.login)}
+            onChange={handleChange(index, user.login)}
+            sx={{ backgroundColor: '#ffffff' }}
           >
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography>{user.login}</Typography>
             </AccordionSummary>
-            <AccordionDetails sx={{ ml: 2,boxShadow: 'none'  }}>
-               {userRepo.length > 0 ? (
-                   userRepo.map((repo, i) => (
-                  <Box sx={{ flexGrow: 5, backgroundColor: '#f5f5f5', padding: 2, mb: i !== userRepo.length - 1 ? 2 : 0, }}>
-                  <Grid spacing={2} container sx={{ outline: 'none' }}>
-                    <Grid size={8} sx={{ textAlign: 'left' }} >
-                      <Typography sx={{ fontWeight: 'bold' }} >{repo.name}</Typography>
-                    </Grid>
-                    <Grid size={4}>
-                      <Typography
-                        component="div"
-                        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end',fontWeight: 'bold' }}
+
+            <AccordionDetails sx={{ ml: 2, boxShadow: 'none' }}>
+              {expandedIndex === index && (
+                <>
+                  {userRepo.length > 0 ? (
+                    userRepo.map((repo, i) => (
+                      <Box
+                        key={repo.name + i}
+                        sx={{
+                          backgroundColor: '#f5f5f5',
+                          padding: 2,
+                          mb: i !== userRepo.length - 1 ? 2 : 0,
+                          width: '100%',
+                        }}
                       >
-                        <StarIcon sx={{ color: 'black', mr: 0.5 }} />
-                        {repo.stargazers_count}
-                      </Typography>
-                    </Grid>
-                    <Grid size={12} sx={{ textAlign: 'left' }}>
-                      <Typography>{repo.description}</Typography>
-                    </Grid>
-                    
-                  </Grid>
-                </Box>
-                )) 
-  
-                ) : (
-                 <Typography>No repo found !</Typography>
-                )} 
-              { userRepo.map((repo, i) => (
-                  <Box sx={{ flexGrow: 5, backgroundColor: '#f5f5f5', padding: 2, mb: i !== userRepo.length - 1 ? 2 : 0, }}>
-                  <Grid spacing={2} container sx={{ outline: 'none' }}>
-                    <Grid size={8} sx={{ textAlign: 'left' }} >
-                      <Typography sx={{ fontWeight: 'bold' }} >{repo.name}</Typography>
-                    </Grid>
-                    <Grid size={4}>
-                      <Typography
-                        component="div"
-                        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end',fontWeight: 'bold' }}
-                      >
-                        <StarIcon sx={{ color: 'black', mr: 0.5 }} />
-                        {repo.stargazers_count}
-                      </Typography>
-                    </Grid>
-                    <Grid size={12} sx={{ textAlign: 'left' }}>
-                      <Typography>{repo.description}</Typography>
-                    </Grid>
-                    
-                  </Grid>
-                </Box>
-                )) 
-              }
-              
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <Typography sx={{ fontWeight: 'bold' }}>
+                            {repo.name}
+                          </Typography>
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Typography sx={{ fontWeight: 'bold', mr: 0.5 }}>
+                              {repo.stargazers_count}
+                            </Typography>
+                            <StarIcon sx={{ color: 'black' }} />
+                          </Box>
+                        </Box>
+
+                        <Typography sx={{ mt: 1, textAlign: 'left' }}>
+                          {repo.description}
+                        </Typography>
+                      </Box>
+                    ))
+                  ) : (
+                    <Typography>No repo found!</Typography>
+                  )}
+                </>
+              )}
             </AccordionDetails>
           </Accordion>
         ))
