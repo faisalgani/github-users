@@ -20,7 +20,7 @@ A simple React + Vite application to search GitHub users and display their publi
 - Show repository name, description, and star count
 - Error handling for invalid input or no results
 
-## 📦 Installation
+## 📦 Installation & Running App
 
 ```bash
 # Clone the repository
@@ -33,7 +33,7 @@ cd github-user-search
 node version 21.6.2
 npm install
 
-# Run
+# Run app
 npm run dev
 
 # Unit tests
