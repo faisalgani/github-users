@@ -36,5 +36,5 @@ npm install
 # Run app
 npm run dev
 
-# Unit tests
+# Unit test
 npx vitest run
