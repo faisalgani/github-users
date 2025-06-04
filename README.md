@@ -33,5 +33,8 @@ cd github-user-search
 node version 21.6.2
 npm install
 
+# Run
+npm run dev
+
 # Unit tests
 npx vitest run
