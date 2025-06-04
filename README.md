@@ -2,6 +2,9 @@
 
 A simple React + Vite application to search GitHub users and display their public repositories. Built using Material UI (MUI), Zustand for state management, GitHub API and Vitest for unit testing
 
+## 🚀 Demo
+[Demo](https://faisalgani.github.io/github-users/)
+
 ## 🔧 Tech Stack
 
 - [React](https://reactjs.org/)
